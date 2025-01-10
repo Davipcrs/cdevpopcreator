@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using System.Windows.Forms;
 
 namespace cdevpopcreator
 {
@@ -8,7 +9,7 @@ namespace cdevpopcreator
         private PrintScreenManager() {
             this.setPrintFullscreenDefault();
         }
-
+        
         private static PrintScreenManager _instance;
 
         public static PrintScreenManager getInstance()
@@ -62,7 +63,13 @@ namespace cdevpopcreator
             Bitmap bmp = new Bitmap(this.xSize, this.ySize);
 
             Graphics g = Graphics.FromImage(bmp);
+            
+            Point cursorPos = Cursor.Position;
+            
             g.CopyFromScreen(dxPosStart, dyPosStart, dxPosEnd, dyPosEnd, bmp.Size);
+            
+            drawArrow(g, cursorPos);
+            
             g.Dispose();
             return bmp;
 
@@ -90,9 +97,30 @@ namespace cdevpopcreator
             this.dyPosEnd = yRightPoint;
 
         }
-    
-        
 
-        
+        private static void drawArrow(Graphics g, Point cursorPos)
+        {
+            // Define the arrow size and direction
+            int arrowLength = 30;
+            int arrowWidth = 15;
+
+            // Create an arrow pointing down-right
+            Point[] arrowPoints = {
+            cursorPos,                              // Tip of the arrow
+            new Point(cursorPos.X - arrowWidth, cursorPos.Y - arrowWidth), // Top left of the arrow base
+            new Point(cursorPos.X, cursorPos.Y - arrowWidth / 2),         // Middle left of the arrow base
+            new Point(cursorPos.X + arrowWidth, cursorPos.Y - arrowWidth), // Top right of the arrow base
+        };
+
+            // Draw the arrow
+            using (Brush brush = new SolidBrush(Color.Red))
+            {
+                g.FillPolygon(brush, arrowPoints);
+            }
+        }
+
+
+
+
     }
 }

@@ -45,14 +45,16 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Core\MDFileExporter.cs" />
+    <Compile Include="Utils\FSHelper.cs" />
+    <Compile Include="Utils\MDFileExporter.cs" />
     <Compile Include="Core\PrintScreenManager.cs" />
-    <Compile Include="Core\KeyboardMouseClickManager.cs" />
+    <Compile Include="Deamon\KeyboardMouseClickManager.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
   </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
