@@ -31,17 +31,6 @@ namespace cdevpopcreator
         private int dxPosEnd { get; set; } = 0;
         private int dyPosEnd { get; set; } = 0;
 
-        private string filepath { get; set; }
-
-        public void setFilepath(string filepath)
-        {
-            this.filepath = filepath;
-        }
-        public string getFilepath()
-        {
-            return this.filepath;
-
-        }
 
         public void setPrintFullscreenDefault()
         {
@@ -57,7 +46,7 @@ namespace cdevpopcreator
 
  
 
-        public Bitmap takePrint()
+        public Bitmap takeScreenshot()
         {
 
             Bitmap bmp = new Bitmap(this.xSize, this.ySize);
@@ -77,13 +66,6 @@ namespace cdevpopcreator
 
         public void exportPrintToFile(Bitmap bmp)
         {       
-
-            if (this.filepath == null)
-            {
-                return;
-            }
-            bmp.Save(this.filepath, ImageFormat.Png);
-            bmp.Dispose();
 
             return;
         }
