@@ -1,5 +1,6 @@
 ﻿using System.Drawing;
 using System.Drawing.Imaging;
+using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
 namespace cdevpopcreator
@@ -7,7 +8,7 @@ namespace cdevpopcreator
     internal class PrintScreenManager
     {
         private PrintScreenManager() {
-            this.setPrintFullscreenDefault();
+            this.SetPrintFullscreenDefault();
         }
         
         private static PrintScreenManager _instance;
@@ -22,6 +23,12 @@ namespace cdevpopcreator
             return _instance;
         }
 
+        public void Execute(string dirPath)
+        {
+            Bitmap currentScreenShot = this.TakeScreenshot();
+            this.ExportPrintToFile(currentScreenShot, dirPath);
+            return;
+        }
 
 
         private int xSize {  get; set; }
@@ -30,23 +37,24 @@ namespace cdevpopcreator
         private int dyPosStart { get; set; } = 0;
         private int dxPosEnd { get; set; } = 0;
         private int dyPosEnd { get; set; } = 0;
+        private int printNumber { get; set; }  = 0;
 
 
-        public void setPrintFullscreenDefault()
+        private void SetPrintFullscreenDefault()
         {
             this.xSize = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Width;
             this.ySize = System.Windows.Forms.Screen.PrimaryScreen.Bounds.Height;
 
         }
 
-        public string screenSizeToString()
+        private string ScreenSizeToString()
         {
             return $"Set the X to {this.xSize} and Y to {this.ySize}";
         }
 
  
 
-        public Bitmap takeScreenshot()
+        private Bitmap TakeScreenshot()
         {
 
             Bitmap bmp = new Bitmap(this.xSize, this.ySize);
@@ -57,21 +65,23 @@ namespace cdevpopcreator
             
             g.CopyFromScreen(dxPosStart, dyPosStart, dxPosEnd, dyPosEnd, bmp.Size);
             
-            drawArrow(g, cursorPos);
+            DrawArrow(g, cursorPos);
             
             g.Dispose();
             return bmp;
 
         }
 
-        public void exportPrintToFile(Bitmap bmp)
+        private void ExportPrintToFile(Bitmap bmp, string path)
         {       
-
+            FSHelper fileSystem = new FSHelper();
+            fileSystem.SaveFileScreenShot(path.Insert(path.Length-1,"screenshot_"+ printNumber.ToString()), bmp);
+            printNumber = printNumber + 1;
             return;
         }
 
         
-        public void setBoundaries(int xLeftPoint, int yLeftPoint, int xRightPoint, int yRightPoint)
+        private void SetBoundaries(int xLeftPoint, int yLeftPoint, int xRightPoint, int yRightPoint)
         {
             this.dxPosStart = xLeftPoint;
             this.dyPosStart = yLeftPoint;
@@ -80,7 +90,7 @@ namespace cdevpopcreator
 
         }
 
-        private static void drawArrow(Graphics g, Point cursorPos)
+        private static void DrawArrow(Graphics g, Point cursorPos)
         {
             // Define the arrow size and direction
             int arrowLength = 30;

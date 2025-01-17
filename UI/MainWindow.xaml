@@ -5,12 +5,13 @@
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:cdevpopcreator"
              mc:Ignorable="d" 
-             d:DesignHeight="345" d:DesignWidth="512.5">
-    <Grid>
-        <Button Content="Start Saving" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="380,145,0,0" Click="StartSavingButtonClick"/>
-        <Label Content="Label" HorizontalAlignment="Left" Margin="21,22,0,0" VerticalAlignment="Top" Width="43"/>
-        <TextBox HorizontalAlignment="Left" Margin="21,72,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top" Width="138" TextChanged="TextBox_TextChanged"/>
-        <Button Content="Button" HorizontalAlignment="Left" Margin="184,71,0,0" VerticalAlignment="Top" RenderTransformOrigin="0.839,-0.048" Width="46"/>
+             d:DesignHeight="203.166" d:DesignWidth="408.723" WindowStartupLocation="CenterScreen" SizeToContent="WidthAndHeight" ResizeMode="CanMinimize" Background="#FF444444" Title="Auto Screenshot Pop Creator" Topmost="True">
+    <Grid Cursor="Arrow">
+        <Button Content="Start Saving" Margin="296,151,32,16" Click="StartSavingButtonClick"/>
+        <Label Content="Welcome, set the directory to be the destiny of &#xD;&#xA;the Screenshots" HorizontalAlignment="Left" Margin="21,22,0,0" VerticalAlignment="Top" Width="291" Height="44"/>
+        <TextBox HorizontalAlignment="Left" Margin="21,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="342" TextChanged="TextBoxTextChangedEvent"/>
+        <Button Content=":" Margin="368,71,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.839,-0.048" Click="SelectDirectoryPathButtonClick"/>
+        <Button Content="Stop Pop" HorizontalAlignment="Left" Margin="204,151,0,16" Width="87" Click="StopPopButtonClick"/>
 
     </Grid>
 </Window>

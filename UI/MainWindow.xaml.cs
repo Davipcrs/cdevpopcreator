@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
@@ -22,7 +23,10 @@ namespace cdevpopcreator
     public partial class MainWindow : Window
     {
         private NotifyIcon nIcon;
-        
+        private KeyboardMouseClickManager kbManager;
+        private CancellationTokenSource cancellationTokenSource;
+        private Task keyboardTask;
+        private bool keyboardTaskIsRunning = false;
 
         public MainWindow()
         {
@@ -31,11 +35,48 @@ namespace cdevpopcreator
             
         }
 
+        public void StartKbThread()
+        {
+            if (!keyboardTaskIsRunning)
+            {
+                this.kbManager = new KeyboardMouseClickManager();
+                this.cancellationTokenSource = new CancellationTokenSource();
+
+                // Start the task with cancellation support
+                this.keyboardTask = Task.Run(() => kbManager.Execute(cancellationTokenSource.Token), cancellationTokenSource.Token);
+
+                keyboardTaskIsRunning = true;
+            }
+
+        }
+
+        public void StopKbThread() {
+            if (keyboardTaskIsRunning)
+            {
+                cancellationTokenSource.Cancel(); // Signal cancellation to the task
+                try
+                {
+                    keyboardTask.Wait(); // Optionally wait for the task to finish
+                }
+                catch (AggregateException ex) when (ex.InnerExceptions.All(e => e is OperationCanceledException))
+                {
+                    
+                }
+                finally
+                {
+                    cancellationTokenSource.Dispose();
+                    cancellationTokenSource = null;
+                    keyboardTaskIsRunning = false;
+                }
+            }
+        }
+
         private void StartSavingButtonClick(object sender, RoutedEventArgs e)
         {
             
            
             this.Visibility = Visibility.Hidden;
+            this.StartKbThread();
             // this.WindowState = System.Windows.WindowState.Minimized;
             
             
@@ -55,8 +96,21 @@ namespace cdevpopcreator
 
  
 
-        private void TextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void SelectDirectoryPathButtonClick(object sender, RoutedEventArgs e)
         {
+
+        }
+
+        private void TextBoxTextChangedEvent(object sender, TextChangedEventArgs e)
+        {
+
+        }
+
+        private void StopPopButtonClick(object sender, RoutedEventArgs e)
+        {
+            StopKbThread();
+            MDFileExporter exporter =  MDFileExporter.getInstance();
+            exporter.exportProjectToMDFile();
 
         }
     }

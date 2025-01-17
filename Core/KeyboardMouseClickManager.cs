@@ -8,7 +8,11 @@ namespace cdevpopcreator
 {
     internal class KeyboardMouseClickManager
     {
-        public void mousePosition() { }
+
+        public void Execute(System.Threading.CancellationToken token)
+        {
+
+        }
         public void handleMouseClicks() { }
         public void handleKeyboardClicks() { }
     }
