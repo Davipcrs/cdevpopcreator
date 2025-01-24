@@ -1,4 +1,5 @@
-﻿using System.Drawing;
+﻿using System;
+using System.Drawing;
 using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
@@ -75,8 +76,9 @@ namespace cdevpopcreator
         private void ExportPrintToFile(Bitmap bmp, string path)
         {       
             FSHelper fileSystem = new FSHelper();
-            fileSystem.SaveFileScreenShot(path.Insert(path.Length-1,"screenshot_"+ printNumber.ToString()), bmp);
+            fileSystem.SaveFileScreenShot(path.Insert(path.Length,"screenshot_"+ printNumber.ToString() +".png"), bmp);
             printNumber = printNumber + 1;
+            //Console.WriteLine(printNumber);
             return;
         }
 

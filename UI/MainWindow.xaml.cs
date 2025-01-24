@@ -10,6 +10,7 @@ using System.Windows.Data;
 using System.Windows.Documents;
 using System.Windows.Forms;
 using System.Windows.Input;
+using System.Windows.Interop;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
@@ -23,9 +24,11 @@ namespace cdevpopcreator
     public partial class MainWindow : Window
     {
         private NotifyIcon nIcon;
-        private KeyboardMouseClickManager kbManager;
+        private MouseClickManager mouseManager;
+        private KeyboardClickManager keyboardManager;
         private CancellationTokenSource cancellationTokenSource;
         private Task keyboardTask;
+        private Task mouseTask;
         private bool keyboardTaskIsRunning = false;
 
         public MainWindow()
@@ -39,14 +42,16 @@ namespace cdevpopcreator
         {
             if (!keyboardTaskIsRunning)
             {
-                this.kbManager = new KeyboardMouseClickManager();
+                this.mouseManager = new MouseClickManager();
+                this.keyboardManager = new KeyboardClickManager();
                 this.cancellationTokenSource = new CancellationTokenSource();
 
                 // Start the task with cancellation support
-                this.keyboardTask = Task.Run(() => kbManager.Execute(cancellationTokenSource.Token), cancellationTokenSource.Token);
-
+                this.mouseTask = this.mouseManager.Execute(cancellationTokenSource.Token);
+                this.keyboardTask = this.keyboardManager.Execute(cancellationTokenSource.Token);
                 keyboardTaskIsRunning = true;
             }
+            
 
         }
 
@@ -55,12 +60,14 @@ namespace cdevpopcreator
             {
                 cancellationTokenSource.Cancel(); // Signal cancellation to the task
                 try
-                {
-                    keyboardTask.Wait(); // Optionally wait for the task to finish
+                {   
+                    keyboardManager.Stop();
+                    mouseTask.Wait();
+                    //keyboardTask.Wait(); // Optionally wait for the task to finish
                 }
                 catch (AggregateException ex) when (ex.InnerExceptions.All(e => e is OperationCanceledException))
                 {
-                    
+                   
                 }
                 finally
                 {
