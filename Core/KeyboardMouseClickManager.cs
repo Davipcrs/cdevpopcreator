@@ -13,7 +13,10 @@ namespace cdevpopcreator
 {
     internal class MouseClickManager
     {
+        
 
+        private StringHistoryHelper history = StringHistoryHelper.getInstance();
+        private FSHelper fsHelper = FSHelper.getInstance();
         public Task Execute(System.Threading.CancellationToken token)
         {
             return Task.Run(() =>
@@ -23,20 +26,27 @@ namespace cdevpopcreator
 
                     if (System.Windows.Forms.Control.MouseButtons == System.Windows.Forms.MouseButtons.Left)
                     {
-
-                        PrintScreenManager.getInstance().Execute(@"C:\temp\");
+                        
+                        MDFileExporter.getInstance().addEventToMDString(this.history.getHistory());
+                        PrintScreenManager.getInstance().Execute();
+                        this.history.resetHistory();
                     }
 
                     if (System.Windows.Forms.Control.MouseButtons == System.Windows.Forms.MouseButtons.Right)
                     {
 
-                        PrintScreenManager.getInstance().Execute(@"C:\temp\");
+                        MDFileExporter.getInstance().addEventToMDString(this.history.getHistory());
+                        PrintScreenManager.getInstance().Execute();
+                        this.history.resetHistory();
                     }
 
                     if (System.Windows.Forms.Control.MouseButtons == System.Windows.Forms.MouseButtons.Middle)
                     {
 
-                        PrintScreenManager.getInstance().Execute(@"C:\temp\");
+                        MDFileExporter.getInstance().addEventToMDString(this.history.getHistory());
+                        PrintScreenManager.getInstance().Execute();
+                        PrintScreenManager.getInstance().Execute();
+                        this.history.resetHistory();
                     }
                     Thread.Sleep(100); // Light delay to reduce CPU usage
                 }
@@ -51,10 +61,10 @@ namespace cdevpopcreator
     {
         private IntPtr _hookId = IntPtr.Zero;
         private LowLevelKeyboardProc _proc;
-        private String writeHistory = "";
+        private StringHistoryHelper writeHistory = StringHistoryHelper.getInstance();
 
         public KeyboardClickManager()
-        {
+        {   
             _proc = HookCallback;
         }
 
@@ -69,7 +79,7 @@ namespace cdevpopcreator
             if (_hookId != IntPtr.Zero)
             {
                 UnhookWindowsHookEx(_hookId);
-                Console.WriteLine(writeHistory);
+                //Console.WriteLine(writeHistory.getHistory());
                 //Console.WriteLine("KeyboardClickManager stopped.");
             }
         }
@@ -90,19 +100,25 @@ namespace cdevpopcreator
                 int vkCode = Marshal.ReadInt32(lParam);
                 string keyChar = GetKeyCharacter(vkCode);
                 //Console.WriteLine($"Key pressed: {keyChar}");
-                
+
 
 
                 //Console.WriteLine(keyChar);
 
                 // Handle specific key actions here
-                if (keyChar == "Enter")
+                if (keyChar == "20")
+                {
+                }
+                if (keyChar == "")
                 {
                     // Print, save writeHistory to md
-                    writeHistory = "";
+                    MDFileExporter.getInstance().addEventToMDString(writeHistory.getHistory());
+                    PrintScreenManager.getInstance().Execute();
+                    writeHistory.resetHistory();
                     return CallNextHookEx(_hookId, nCode, wParam, lParam);
                 }
-                writeHistory = writeHistory + keyChar;
+                else { writeHistory.setHistory(keyChar); }
+                
             }
             return CallNextHookEx(_hookId, nCode, wParam, lParam);
         }

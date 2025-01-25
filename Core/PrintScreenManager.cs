@@ -24,10 +24,10 @@ namespace cdevpopcreator
             return _instance;
         }
 
-        public void Execute(string dirPath)
+        public void Execute()
         {
             Bitmap currentScreenShot = this.TakeScreenshot();
-            this.ExportPrintToFile(currentScreenShot, dirPath);
+            this.ExportPrintToFile(currentScreenShot);
             return;
         }
 
@@ -73,10 +73,11 @@ namespace cdevpopcreator
 
         }
 
-        private void ExportPrintToFile(Bitmap bmp, string path)
+        private void ExportPrintToFile(Bitmap bmp)
         {       
-            FSHelper fileSystem = new FSHelper();
-            fileSystem.SaveFileScreenShot(path.Insert(path.Length,"screenshot_"+ printNumber.ToString() +".png"), bmp);
+            FSHelper fileSystem = FSHelper.getInstance();
+            fileSystem.SaveFileScreenShot("screenshot_"+ printNumber.ToString() +".png", bmp);
+            MDFileExporter.getInstance().addPrintToMDString("screenshot_" + printNumber.ToString() + ".png");
             printNumber = printNumber + 1;
             //Console.WriteLine(printNumber);
             return;

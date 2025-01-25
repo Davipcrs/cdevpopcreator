@@ -30,18 +30,23 @@ namespace cdevpopcreator
         private Task keyboardTask;
         private Task mouseTask;
         private bool keyboardTaskIsRunning = false;
+        private FSHelper fSHelper = FSHelper.getInstance();
+
 
         public MainWindow()
         {
             this._nIconCustomInit();
             InitializeComponent();
-            
+            fSHelper.setOutputFolder(@"C:\temp");
+            PathTextBox.Text = fSHelper.getOutputFolder();
+
         }
 
         public void StartKbThread()
         {
             if (!keyboardTaskIsRunning)
             {
+                
                 this.mouseManager = new MouseClickManager();
                 this.keyboardManager = new KeyboardClickManager();
                 this.cancellationTokenSource = new CancellationTokenSource();
@@ -74,6 +79,8 @@ namespace cdevpopcreator
                     cancellationTokenSource.Dispose();
                     cancellationTokenSource = null;
                     keyboardTaskIsRunning = false;
+                    
+                    fSHelper.SaveMDFile("mdexport.md", MDFileExporter.getInstance().getMDData());
                 }
             }
         }
@@ -94,11 +101,10 @@ namespace cdevpopcreator
             this.nIcon = new NotifyIcon();
             this.nIcon.Icon = new System.Drawing.Icon(@"D:\src\cdev-suite\camera.ico");
             this.nIcon.Visible = true;
-            this.nIcon.BalloonTipTitle = "Teste SystemTray";
-            this.nIcon.Text = "text";
-            this.nIcon.BalloonTipText = "daw";
+            this.nIcon.Text = "CDEV POP CREATOR";
             this.nIcon.ContextMenuStrip = new ContextMenuStrip();
             this.nIcon.ContextMenuStrip.Items.Add("Change visibility", null, (_, _) => { this.Visibility = Visibility.Visible; });
+            this.nIcon.ContextMenuStrip.Items.Add("Stop Recording", null, (_, _) => { this.StopKbThread(); });
         }
 
  
@@ -108,17 +114,19 @@ namespace cdevpopcreator
 
         }
 
-        private void TextBoxTextChangedEvent(object sender, TextChangedEventArgs e)
+        private void PathTextBoxTextChangedEvent(object sender, TextChangedEventArgs e)
         {
+            string currentPath = PathTextBox.Text;
 
+            this.fSHelper.setOutputFolder(currentPath);
         }
 
         private void StopPopButtonClick(object sender, RoutedEventArgs e)
         {
             StopKbThread();
-            MDFileExporter exporter =  MDFileExporter.getInstance();
-            exporter.exportProjectToMDFile();
 
         }
+
+
     }
 }

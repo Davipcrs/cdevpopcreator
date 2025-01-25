@@ -9,7 +9,7 @@
     <Grid Cursor="Arrow">
         <Button Content="Start Saving" Margin="296,151,32,16" Click="StartSavingButtonClick"/>
         <Label Content="Welcome, set the directory to be the destiny of &#xD;&#xA;the Screenshots" HorizontalAlignment="Left" Margin="21,22,0,0" VerticalAlignment="Top" Width="291" Height="44"/>
-        <TextBox HorizontalAlignment="Left" Margin="21,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="342" TextChanged="TextBoxTextChangedEvent"/>
+        <TextBox x:Name="PathTextBox" HorizontalAlignment="Left" Margin="21,72,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="342" TextChanged="PathTextBoxTextChangedEvent"/>
         <Button Content=":" Margin="368,71,10,0" VerticalAlignment="Top" RenderTransformOrigin="0.839,-0.048" Click="SelectDirectoryPathButtonClick"/>
         <Button Content="Stop Pop" HorizontalAlignment="Left" Margin="204,151,0,16" Width="87" Click="StopPopButtonClick"/>
 

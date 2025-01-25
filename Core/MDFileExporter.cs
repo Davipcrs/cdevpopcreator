@@ -22,14 +22,18 @@ namespace cdevpopcreator
             return _instance;
         }
         private string MDString;
-        public void exportProjectToMDFile() { }
-        public void createMDString() { }
-        public void addPrintToMDString() { 
 
-     
+        public string getMDData()
+        {
+            return MDString;
+        }
+
+        public void createMDString() { }
+        public void addPrintToMDString(string filename) {
+            MDString = MDString + "  \n" + $"![{filename}](./{filename})";
         }
         public void addEventToMDString(string eventStringData) {
-            MDString = MDString + eventStringData;
+            MDString = MDString + "  \n" + eventStringData;
             return; 
         }
     }
