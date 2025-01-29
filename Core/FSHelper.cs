@@ -7,6 +7,14 @@ using System.Reflection.Metadata;
 using System.Text;
 using System.Threading.Tasks;
 
+
+// @DOCSTART
+// ### FSHelper.cs (FSHelper) @NL
+// File Responsible to the FileSystem in the application @NL
+// Defines the OutputFolder, used on the app @NL
+// Also is responsible to save the Image files and the MD files. @NL
+// @DOCEND
+
 namespace cdevpopcreator
 {
     internal class FSHelper
@@ -26,6 +34,10 @@ namespace cdevpopcreator
             return _instance;
         }
 
+        // @DOCSTART
+        // Import implementation: @NL
+        // @CBS cs
+
         private String outputFolder = "";
 
         public void setOutputFolder(String outputFolder)
@@ -38,9 +50,10 @@ namespace cdevpopcreator
             {
                 this.outputFolder = outputFolder + @"\" ;
             }
-
-            
         }
+        // @CBE
+        // @NL
+        // @DOCEND
 
         public String getOutputFolder()
         {

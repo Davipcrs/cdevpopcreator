@@ -5,6 +5,13 @@ using System.Security;
 using System.Text;
 using System.Threading.Tasks;
 
+// @DOCSTART
+// ### MDFileExporter.cs (MDFileExporter) @NL
+// File Responsible to the .md File in the application @NL
+// Defines how the program stores the data in the markdown @NL
+// @DOCEND
+
+
 namespace cdevpopcreator
 {
     internal class MDFileExporter
@@ -29,6 +36,10 @@ namespace cdevpopcreator
         }
 
         public void createMDString() { }
+
+        // @DOCSTART
+        // Import implementation: @NL
+        // @CBS cs
         public void addPrintToMDString(string filename) {
             MDString = MDString + "  \n" + $"![{filename}](./{filename})";
         }
@@ -36,5 +47,8 @@ namespace cdevpopcreator
             MDString = MDString + "  \n" + eventStringData;
             return; 
         }
+        // @CBE
+        // @NL
+        // @DOCEND
     }
 }

@@ -99,9 +99,9 @@ namespace cdevpopcreator
         private void _nIconCustomInit()
         {
             this.nIcon = new NotifyIcon();
-            this.nIcon.Icon = new System.Drawing.Icon(@"D:\src\cdev-suite\camera.ico");
+            this.nIcon.Icon = new System.Drawing.Icon(@".\cdevpopcreatoricon.ico");
             this.nIcon.Visible = true;
-            this.nIcon.Text = "CDEV POP CREATOR";
+            this.nIcon.Text = "cdev pop creator";
             this.nIcon.ContextMenuStrip = new ContextMenuStrip();
             this.nIcon.ContextMenuStrip.Items.Add("Change visibility", null, (_, _) => { this.Visibility = Visibility.Visible; });
             this.nIcon.ContextMenuStrip.Items.Add("Stop Recording", null, (_, _) => { this.StopKbThread(); });

@@ -4,6 +4,11 @@ using System.Drawing.Imaging;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
+// @DOCSTART
+// ### PrintScreenManager.cs (PrintScreenManager) @NL
+// File responsible to the screenshots takinh @NL
+// @DOCEND
+
 namespace cdevpopcreator
 {
     internal class PrintScreenManager

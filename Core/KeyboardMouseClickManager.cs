@@ -7,7 +7,12 @@ using System.Diagnostics;
 using System.Text;
 
 
-
+// @DOCSTART
+// ### KeyboardMouseClickManager.cs (MouseClickManager and KeyboardClickManager) @NL
+// File Responsible to the user input Hooks in the application @NL
+// Defines the Mouse and Keyboard Hooks, used on the app @NL
+// Also is responsible to trigger the Screenshots and capturing the text. @NL
+// @DOCEND
 
 namespace cdevpopcreator
 {
@@ -24,6 +29,9 @@ namespace cdevpopcreator
                 while (!token.IsCancellationRequested)
                 {
 
+                    // @DOCSTART
+                    // Import implementation (MouseClick screenshot trigger): @NL
+                    // @CBS cs
                     if (System.Windows.Forms.Control.MouseButtons == System.Windows.Forms.MouseButtons.Left)
                     {
                         
@@ -48,6 +56,9 @@ namespace cdevpopcreator
                         PrintScreenManager.getInstance().Execute();
                         this.history.resetHistory();
                     }
+                    // @CBE
+                    // @NL
+                    // @DOCEND
                     Thread.Sleep(100); // Light delay to reduce CPU usage
                 }
 
@@ -95,21 +106,15 @@ namespace cdevpopcreator
 
         private IntPtr HookCallback(int nCode, IntPtr wParam, IntPtr lParam)
         {
+            // @DOCSTART
+            // Import implementation (Keyboard screenshot trigger / Text Saving): @NL
+            // @CBS cs
             if (nCode >= 0 && wParam == (IntPtr)WM_KEYDOWN)
             {
                 int vkCode = Marshal.ReadInt32(lParam);
                 string keyChar = GetKeyCharacter(vkCode);
-                //Console.WriteLine($"Key pressed: {keyChar}");
 
-
-
-                //Console.WriteLine(keyChar);
-
-                // Handle specific key actions here
-                if (keyChar == "20")
-                {
-                }
-                if (keyChar == "")
+                if (keyChar == "ENTER")
                 {
                     // Print, save writeHistory to md
                     MDFileExporter.getInstance().addEventToMDString(writeHistory.getHistory());
@@ -117,14 +122,32 @@ namespace cdevpopcreator
                     writeHistory.resetHistory();
                     return CallNextHookEx(_hookId, nCode, wParam, lParam);
                 }
+                if (keyChar == "BACKSPACE")
+                {
+                    writeHistory.backspace();
+                }
                 else { writeHistory.setHistory(keyChar); }
                 
             }
             return CallNextHookEx(_hookId, nCode, wParam, lParam);
+            // @CBE
+            // @NL
+            // @DOCEND
         }
 
         private string GetKeyCharacter(int vkCode)
         {
+
+            if ((ConsoleKey)vkCode == ConsoleKey.Enter)
+            {
+                return "ENTER";
+            }
+
+            if ((ConsoleKey)vkCode == ConsoleKey.Backspace)
+            {
+                return "BACKSPACE";
+            }
+
             StringBuilder sb = new StringBuilder(5);
             byte[] keyboardState = new byte[256];
             GetKeyboardState(keyboardState);
